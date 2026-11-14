@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080d09"><meta name="description" content="A simple garden planting and growth tracker.">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Garden Ledger</title>
+<style>
+:root{--bg:#080d09;--panel:#151c16;--ink:#edf3ed;--muted:#a4b2a5;--line:#344237;--header:#050805;--accent:#69bd78;--accent-ink:#071009;--surface2:#202a21;--surface3:#2c392e;--input:#1b241c;--shadow:0 5px 20px #0005}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Manrope",system-ui,sans-serif;padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+header{background:var(--header);color:var(--ink);padding:20px 18px 17px;position:sticky;top:0;z-index:5;border-bottom:1px solid #1d291f}header .top{display:flex;align-items:center;justify-content:space-between;gap:12px}h1{font-size:22px;margin:0;font-weight:800;letter-spacing:-.5px}.sub{color:var(--muted);font-size:12px;margin-top:3px}
+main{max-width:760px;margin:auto;padding:15px;display:grid;gap:14px}.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;position:sticky;top:83px;z-index:6;background:var(--header);padding:8px 0}.tab{border:1px solid var(--line);background:var(--surface2);color:var(--muted);border-radius:11px;padding:10px 8px;font-weight:700;white-space:nowrap;cursor:pointer}.tab.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;box-shadow:var(--shadow)}h2{font-size:17px;margin:0 0 12px;letter-spacing:-.2px}h3{font-size:14px;margin:0}.muted,.tiny{color:var(--muted)}.tiny{font-size:12px}
+input,select,textarea{width:100%;min-width:0;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:var(--input);color:var(--ink);font:inherit}label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin:0 0 5px}.field{min-width:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.btn{border:0;border-radius:11px;padding:11px 14px;background:var(--accent);color:var(--accent-ink);font:700 14px "Manrope",sans-serif;cursor:pointer}.btn.secondary,.btn.ghost{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}.btn.danger{background:#492a2b;color:#ffd9d9}.btn:disabled{opacity:.4}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar>*{flex:1}.section{display:grid;gap:11px}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.stat{background:var(--surface2);border-radius:13px;padding:12px}.stat .v{font-size:25px;font-weight:800;letter-spacing:-.7px;font-variant-numeric:tabular-nums}.stat .l{font-size:11px;color:var(--muted)}.hide{display:none!important}.pill{font-size:11px;color:var(--muted);background:var(--surface2);padding:4px 8px;border-radius:99px;display:inline-block}.plant-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);align-items:center}.plant-row:last-child{border:0}.plant-name{font-weight:800}.plant-meta{font-size:12px;color:var(--muted)}.status{font-size:11px;font-weight:700;padding:4px 8px;border-radius:99px;background:#263c2b;color:#9cdda7;white-space:nowrap}.status.pending{background:#3a3524;color:#e5d18a}.status.overdue{background:#452b2b;color:#f0a7a7}.progress{height:7px;background:var(--surface3);border-radius:99px;overflow:hidden;margin-top:8px}.progress i{height:100%;display:block;background:var(--accent);border-radius:99px}.notice{padding:11px 12px;background:var(--surface2);border:1px solid var(--line);border-radius:11px;font-size:12px}.empty{padding:18px;text-align:center;color:var(--muted);font-size:13px}.event{padding:11px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:75px 1fr;gap:10px}.event:last-child{border:0}.event-date{font-size:12px;color:var(--accent);font-weight:800}.footer{text-align:center;font-size:11px;color:var(--muted);padding:5px 10px 18px}dialog{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;max-width:min(92vw,480px)}dialog::backdrop{background:#000a}.toast{position:fixed;right:14px;bottom:14px;background:#233b28;border:1px solid #477a50;color:#c9f0cf;padding:10px 14px;border-radius:11px;z-index:20;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}
+@media(max-width:520px){main{padding:12px}.tabs{grid-template-columns:repeat(2,minmax(0,1fr));top:82px}.tab{white-space:normal;min-height:42px}.stats{gap:6px}.stat{padding:10px}.stat .v{font-size:21px}.grid{gap:8px}}
+</style></head>
+<body>
+<header><div class="top"><div><h1>Garden Ledger</h1><div class="sub">Your garden, written down.</div></div><span class="pill" id="seasonLabel">Growing season</span></div></header>
+<main>
+<nav class="tabs" aria-label="Main navigation">
+<button class="tab active" data-tab="garden">Garden</button><button class="tab" data-tab="plants">Plant library</button><button class="tab" data-tab="calendar">Calendar</button><button class="tab" data-tab="history">History</button><button class="tab" data-tab="settings">Settings</button>
+</nav>
+<section id="garden" class="section">
+<div class="card section">
+<div class="row between"><h2 style="margin:0">Garden overview</h2><span class="tiny" id="todayLabel"></span></div>
+<div class="stats"><div class="stat"><div class="v" id="plantCount">0</div><div class="l">Active plantings</div></div><div class="stat"><div class="v" id="sproutCount">0</div><div class="l">Sprouting soon</div></div><div class="stat"><div class="v" id="harvestCount">0</div><div class="l">Harvests soon</div></div></div>
+<div class="row between"><h2 style="margin:3px 0 0">Your plantings</h2><button class="btn small" id="addPlantTop">＋ Add planting</button></div>
+<div id="plantingList"></div>
+</div>
+<div class="card section"><h2>Coming up</h2><div id="upcomingList"></div></div>
+</section>
+<section id="plants" class="section hide">
+<div class="card section"><div class="row between"><h2 style="margin:0">Plant library</h2><span class="pill" id="speciesCount"></span></div>
+<input id="plantSearch" placeholder="Search plants and varieties…">
+<div id="speciesList"></div></div>
+<div class="card section"><h2>Add a custom plant</h2>
+<div class="field"><label for="customPlantName">Plant name</label><input id="customPlantName" placeholder="e.g. Purple basil"></div>
+<div class="grid"><div class="field"><label for="customMin">Germination min (days)</label><input id="customMin" type="number" min="1" value="5"></div><div class="field"><label for="customMax">Germination max (days)</label><input id="customMax" type="number" min="1" value="10"></div></div>
+<div class="grid"><div class="field"><label for="customHarvestMin">Harvest min (days)</label><input id="customHarvestMin" type="number" min="1" value="60"></div><div class="field"><label for="customHarvestMax">Harvest max (days)</label><input id="customHarvestMax" type="number" min="1" value="90"></div></div>
+<button class="btn" id="saveCustomPlant">Save custom plant</button></div>
+</section>
+<section id="calendar" class="section hide"><div class="card section"><h2>Growth calendar</h2><p class="tiny" style="margin:0">Predicted milestones calculated from each planting date and the plant's typical growing ranges.</p><div id="calendarList"></div></div></section>
+<section id="history" class="section hide"><div class="card section"><h2>Planting history</h2><div id="historyList"></div></div></section>
+<section id="settings" class="section hide">
+<div class="card section"><h2>Garden settings</h2><div class="field"><label for="gardenName">Garden name</label><input id="gardenName" placeholder="My Garden"></div><div class="field"><label for="location">Location (optional)</label><input id="location" placeholder="e.g. Melbourne, Victoria"></div><button class="btn" id="saveSettings">Save settings</button></div>
+<div class="card section"><h2>Data & backup</h2><p class="tiny" style="margin:0">Your garden records are stored on this device. Export a backup regularly, especially before changing browsers or devices.</p><div class="toolbar"><button class="btn" id="exportData">Export backup</button><button class="btn secondary" id="importButton">Import backup</button><input id="importFile" type="file" accept="application/json" class="hide"></div><div id="backupStatus" class="tiny" aria-live="polite"></div></div>
+<div class="card section"><h2>About Garden Ledger</h2><p class="tiny" style="margin:0">A simple planting diary with estimated germination and harvest windows. Predictions are guides, not guarantees. Actual results depend on variety, temperature, moisture, planting depth and growing conditions.</p><button class="btn danger" id="clearAll">Delete all garden data</button></div>
+</section>
+<div class="footer">Garden Ledger · Planting and growth tracker</div>
+</main><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="plantDialog"><form method="dialog" id="plantForm" class="section" style="padding:4px;min-width:min(78vw,390px)">
+<div class="row between"><h2 style="margin:0">Add a planting</h2><button class="btn ghost" value="cancel" aria-label="Close">✕</button></div>
+<div class="field"><label for="plantSpecies">Plant</label><select id="plantSpecies" required></select></div>
+<div class="field"><label for="variety">Variety (optional)</label><input id="variety" placeholder="e.g. Roma, Cherry, Genovese"></div>
+<div class="grid"><div class="field"><label for="plantedDate">Date planted</label><input id="plantedDate" type="date" required></div><div class="field"><label for="quantity">Quantity</label><input id="quantity" type="number" min="1" value="1"></div></div>
+<div class="grid"><div class="field"><label for="plantMethod">Growing method</label><select id="plantMethod"><option>Direct sow</option><option>Seed tray</option><option>Seedling transplant</option><option>Pot</option><option>Other</option></select></div><div class="field"><label for="plantLocation">Location</label><input id="plantLocation" placeholder="Bed 1, balcony…"></div></div>
+<div class="field"><label for="plantNotes">Notes (optional)</label><textarea id="plantNotes" rows="2" placeholder="Soil, conditions, anything to remember…"></textarea></div>
+<div class="toolbar"><button class="btn" id="savePlant" value="default">Save planting</button></div></form></dialog>
+<script src="app.js"></script></body></html>
